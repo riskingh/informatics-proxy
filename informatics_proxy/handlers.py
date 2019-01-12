@@ -31,6 +31,6 @@ async def standings_handler(request):
     data = request.query
     statement_id = int(data['statement_id'])
     group_id = int(data['group_id'])
-    await standings(request.cookies, statement_id, group_id)
-    return web.json_response({})
+    response_json = await standings(request.cookies, statement_id, group_id)
+    return web.json_response(response_json)
 

@@ -1,5 +1,6 @@
 import aiohttp
 import logging
+import time
 
 from informatics_proxy.config import config
 from informatics_proxy.exceptions import LoginException
@@ -43,4 +44,7 @@ async def standings(cookies, statement_id, group_id):
             allow_redirects=False,
             ssl=False,
         ) as response:
-            return parse_standings((await response.read()).decode('utf-8'))
+            return {
+                'timestamp': int(time.time() * 1000),
+                'standings': list(parse_standings((await response.read()).decode('utf-8'))),
+            }
