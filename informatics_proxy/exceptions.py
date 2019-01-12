@@ -4,3 +4,7 @@ class BaseProxyException(Exception):
 
 class LoginException(Exception):
     pass
+
+
+class StandingsException(Exception):
+    pass

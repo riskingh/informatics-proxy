@@ -2,7 +2,7 @@ import logging
 from aiohttp import web
 
 from informatics_proxy.logic import login, standings
-from informatics_proxy.exceptions import LoginException
+from informatics_proxy.exceptions import LoginException, StandingsException
 
 log = logging.getLogger()
 
@@ -31,6 +31,10 @@ async def standings_handler(request):
     data = request.query
     statement_id = int(data['statement_id'])
     group_id = int(data['group_id'])
-    response_json = await standings(request.cookies, statement_id, group_id)
+    try:
+        response_json = await standings(request.cookies, statement_id, group_id)
+    except StandingsException:
+        log.exception('Standings failed.')
+        return web.json_response({}, status=500)
     return web.json_response(response_json)
 

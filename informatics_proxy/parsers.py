@@ -1,6 +1,8 @@
 import bs4
 import re
 
+from informatics_proxy.exceptions import StandingsException
+
 user_id_regex = re.compile('user_id=([0-9]+)')
 
 
@@ -19,6 +21,8 @@ def parse_standings_problem(s: str):
 def parse_standings(html: str):
     soup = bs4.BeautifulSoup(html, 'html.parser')
     tables = soup.find_all('table', class_='BlueTable')
+    if not tables:
+        raise StandingsException('Table not found')
     standings = tables[0]
     rows = standings.find_all('tr', recursive=False)
 
